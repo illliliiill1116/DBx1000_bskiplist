@@ -26,6 +26,8 @@ struct glob_param {
 
 class index_btree : public index_base {
 public:
+	using index_base::init;
+	using index_base::index_read;
 	RC			init(uint64_t part_cnt);
 	RC			init(uint64_t part_cnt, table_t * table);
 	bool 		index_exist(idx_key_t key); // check if the key exist. 

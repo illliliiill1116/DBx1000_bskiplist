@@ -36,6 +36,7 @@ public:
 class IndexHash  : public index_base
 {
 public:
+	using index_base::init;
 	RC 			init(uint64_t bucket_cnt, int part_cnt);
 	RC 			init(int part_cnt, 
 					table_t * table, 
