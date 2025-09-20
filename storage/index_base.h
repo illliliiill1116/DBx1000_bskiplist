@@ -15,9 +15,9 @@ public:
 							itemid_t * item, 
 							int part_id=-1)=0;
 
-	virtual RC	 		index_read(idx_key_t key, 
-							itemid_t * &item,
-							int part_id=-1)=0;
+	// virtual RC	 		index_read(idx_key_t key, 
+	// 						itemid_t * &item,
+	// 						int part_id=-1)=0;
 	
 	virtual RC	 		index_read(idx_key_t key, 
 							itemid_t * &item,
