@@ -207,7 +207,7 @@ void tpcc_wl::init_tab_stock(uint64_t wid) {
 		char s_data[50];
 		int len = MakeAlphaString(26, 50, s_data, wid-1);
 		if (rand() % 100 < 10) {
-			int idx = URand(0, len - 8, wid-1);
+			int idx = URand(0, len - 9, wid-1);
 			strcpy(&s_data[idx], "original");
 		}
 		row->set_value(S_DATA, s_data);
