@@ -38,7 +38,7 @@ RC ycsb_txn_man::run_txn(base_query * query) {
 			if (iteration == 0) {
 				m_item = index_read(_wl->the_index, req->key, part_id);
 			} 
-#if INDEX_STRUCT == IDX_BTREE || INDEX_STRUCT == IDX_SKIPLIST || INDEX_STRUCT == IDX_SKIPLIST_FS
+#if INDEX_STRUCT == IDX_BTREE || INDEX_STRUCT == IDX_SKIPLIST || INDEX_STRUCT == IDX_SKIPLISTxFS
 			else {
 				_wl->the_index->index_next(get_thd_id(), m_item);
 				if (m_item == NULL)

@@ -153,7 +153,7 @@ enum TsType {R_REQ, W_REQ, P_REQ, XP_REQ};
 #elif	(INDEX_STRUCT == IDX_SKIPLIST)
 #include "index_skiplist.h"
 #define INDEX		IndexSkiplist
-#else // IDX_SKIPLIST_FS
+#else // IDX_SKIPLISTxFS
 #include "index_skiplist_foresight.h"
 #define INDEX		IndexSkiplistForesight
 #endif

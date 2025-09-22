@@ -17,7 +17,7 @@
 // # of transactions to run for warmup
 #define WARMUP						0
 // YCSB or TPCC
-#define WORKLOAD TPCC
+#define WORKLOAD 					YCSB
 // print the transaction latency distribution
 #define PRT_LAT_DISTR				false
 #define STATS_ENABLE				true
@@ -47,7 +47,7 @@
 /***********************************************/
 // WAIT_DIE, NO_WAIT, DL_DETECT, TIMESTAMP, MVCC, HEKATON, HSTORE, OCC, VLL, TICTOC, SILO
 // TODO TIMESTAMP does not work at this moment
-#define CC_ALG 						TICTOC
+#define CC_ALG 						NO_WAIT
 #define ISOLATION_LEVEL 			SERIALIZABLE
 
 // all transactions acquire tuples according to the primary key order.
@@ -67,7 +67,6 @@
 // #define INDEX_STRUCT				IDX_HASH
 #define INDEX_STRUCT				IDX_SKIPLIST
 #define BTREE_ORDER 				16
-#define FORESIGHT_SIMD				false
 
 // [DL_DETECT] 
 #define DL_LOOP_DETECT				1000 	// 100 us
@@ -200,7 +199,8 @@ extern TestCases					g_test_case;
 #define IDX_HASH 					1
 #define IDX_BTREE					2
 #define IDX_SKIPLIST				3
-#define IDX_SKIPLIST_FS				4
+#define IDX_SKIPLISTxFS				4
+#define IDX_SKIPLISTxFSxSIMD		5
 // WORKLOAD
 #define YCSB						1
 #define TPCC						2

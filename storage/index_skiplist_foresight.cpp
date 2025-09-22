@@ -49,7 +49,7 @@ slf_node_t * IndexSkiplistForesight::weak_search_predecessors(idx_key_t key, slf
     idx_key_t x_next_k;
     x = head;
     x_next = head->next[MAXLEVEL-1].next_ptr;
-#if !FORESIGHT_SIMD
+#if !INDEX_STRUCT==IDX_SKIPLISTxFSxSIMD 
     for (int i = (pa) ? MAXLEVEL-1 : toplevel; i >= 1; i--) { // if pa is null, start from highest used level
         x_next_k = x->next[i].next_key;
         x_next = x->next[i].next_ptr;
@@ -183,7 +183,7 @@ retry:
         /* Ensure we have unique key values at every level. */
         if ( succ->key <= key ) { // also avoid premature descent
             __sync_synchronize(); /* get up-to-date view of the world. */
-#if !FORESIGHT_SIMD
+#if !INDEX_STRUCT==IDX_SKIPLISTxFSxSIMD 
             weak_search_predecessors_nf(key, preds, succs); // do not use foresight to avoid another premature descent  
 #else
             weak_search_predecessors(key, preds, succs); // premature descent is impossible with SIMD
