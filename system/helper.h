@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdint.h>
 #include "global.h"
-
+#include "SIMD_atomics.h"
 
 /************************************************/
 // atomic operations
@@ -22,6 +22,17 @@
 	__sync_fetch_and_add(&(dest), value)
 #define ATOM_SUB_FETCH(dest, value) \
 	__sync_sub_and_fetch(&(dest), value)
+#define WIDE_CAS(_a, _o1, _o2, _n1, _n2)                          \
+({                                                                \
+    char cas_result;                                              \
+    __asm__ __volatile__(                                         \
+        "lock; cmpxchg16b %0; setz %1"                            \
+        : "=m" (*(_a)), "=a" (cas_result) \
+        : "m" (*(_a)),                    \
+          "d" (_o2), "a" (_o1), "c" (_n2), "b" (_n1)              \
+        : "memory");                                              \
+    cas_result;                                                   \
+})
 
 #define COMPILER_BARRIER asm volatile("" ::: "memory");
 #define PAUSE { __asm__ ( "pause;" ); }

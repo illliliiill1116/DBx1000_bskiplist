@@ -150,9 +150,12 @@ enum TsType {R_REQ, W_REQ, P_REQ, XP_REQ};
 #define INDEX		index_btree
 #elif  (INDEX_STRUCT == IDX_HASH) // IDX_HASH
 #define INDEX		IndexHash
-#else	// IDX_SKIPLIST
+#elif	(INDEX_STRUCT == IDX_SKIPLIST)
 #include "index_skiplist.h"
 #define INDEX		IndexSkiplist
+#else // IDX_SKIPLIST_FS
+#include "index_skiplist_foresight.h"
+#define INDEX		IndexSkiplistForesight
 #endif
 
 /************************************************/

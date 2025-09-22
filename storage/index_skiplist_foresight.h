@@ -1,0 +1,50 @@
+#pragma once 
+
+#include "global.h"
+#include "helper.h"
+#include "index_base.h"
+
+#define MAXLEVEL 25
+typedef struct SkiplistForesightNode slf_node_t;
+typedef slf_node_t * volatile sh_fnode_pt;
+
+typedef struct next_foresight_st {
+    sh_fnode_pt next_ptr;
+    volatile idx_key_t next_key;
+} next_foresight_t __attribute__((aligned(16))); // must be aligned to support wide CAS
+
+// each node contains items sharing the same key
+struct SkiplistForesightNode {
+    uint64_t        		toplevel;
+	idx_key_t 				key;
+	itemid_t * volatile		items;
+    next_foresight_t      		next[1];
+};
+
+
+// skiplist index does not support partition yet.
+class IndexSkiplistForesight  : public index_base
+{
+public:
+	using index_base::init;
+	RC 			init(int part_cnt);
+	RC 			init(int part_cnt, table_t * table);
+	bool 		index_exist(idx_key_t key); // check if the key exists.
+	RC 			index_insert(idx_key_t key, itemid_t * item, int part_id=-1, uint64_t thd_id = 0);
+	// the following call returns a single item
+	RC	 		index_read(idx_key_t key, itemid_t * &item,
+							int part_id=-1, int thd_id=0);
+	RC 			index_next(uint64_t thd_id, itemid_t * &item, bool samekey = false);
+private:
+	// TODO: private funcs?
+    static slf_node_t * 		allocate_node(unsigned int toplevel, idx_key_t key, int part_id = -1);
+	unsigned int 			sl_randomLevel(const int tid);
+    slf_node_t * 			weak_search_predecessors(idx_key_t key, slf_node_t **pa = nullptr, slf_node_t **na = nullptr);
+    slf_node_t * 			weak_search_predecessors_nf(idx_key_t key, slf_node_t **pa = nullptr, slf_node_t **na = nullptr);
+
+    slf_node_t * 	head;
+    uint64_t       	toplevel; // height of the tallest tower in the skiplist
+	char 			padding[PREFETCH_SIZE_BYTES];
+	slf_node_t * 	cur_node_per_thd[PREFETCH_SIZE_WORDS * THREAD_CNT];
+	itemid_t * 		cur_item_per_thd[PREFETCH_SIZE_WORDS * THREAD_CNT];
+};
