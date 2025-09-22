@@ -5,6 +5,7 @@
 // Simulation + Hardware
 /***********************************************/
 #define THREAD_CNT					4
+#define MAX_PARALLELISM				128
 #define PART_CNT					1 
 // each transaction only accesses 1 virtual partition. But the lock/ts manager and index are not aware of such partitioning. VIRTUAL_PART_CNT describes the request distribution and is only used to generate queries. For HSTORE, VIRTUAL_PART_CNT should be the same as PART_CNT.
 #define VIRTUAL_PART_CNT			1
@@ -34,6 +35,13 @@
 #define MEM_SIZE					(1UL << 30) 
 #define NO_FREE						false
 
+// the following definition is only used to pad data to avoid false sharing.
+// although the number of words per cache line is actually 8, we inflate this
+// figure to counteract the effects of prefetching multiple adjacent cache lines.
+// inspired by Trevor Brown's implementations code
+#define PREFETCH_SIZE_WORDS 24
+#define PREFETCH_SIZE_BYTES 192
+
 /***********************************************/
 // Concurrency Control
 /***********************************************/
@@ -56,8 +64,10 @@
 #define ENABLE_LATCH				false
 #define CENTRAL_INDEX				false
 #define CENTRAL_MANAGER 			false
-#define INDEX_STRUCT				IDX_HASH
+// #define INDEX_STRUCT				IDX_HASH
+#define INDEX_STRUCT				IDX_SKIPLIST
 #define BTREE_ORDER 				16
+#define FORESIGHT_SIMD				false
 
 // [DL_DETECT] 
 #define DL_LOOP_DETECT				1000 	// 100 us
@@ -109,12 +119,12 @@
 // max number of rows touched per transaction
 #define MAX_ROW_PER_TXN				64
 #define QUERY_INTVL 				1UL
-#define MAX_TXN_PER_PART 			100
+#define MAX_TXN_PER_PART 			100000
 #define FIRST_PART_LOCAL 			true
 #define MAX_TUPLE_SIZE				1024 // in bytes
 // ==== [YCSB] ====
-#define INIT_PARALLELISM			40
-#define SYNTH_TABLE_SIZE 			(1024 * 40)
+#define INIT_PARALLELISM			64
+#define SYNTH_TABLE_SIZE 			(1024 * 1024 * 10)
 #define ZIPF_THETA 					0.6
 #define READ_PERC 					0.9
 #define WRITE_PERC 					0.1
@@ -133,7 +143,7 @@
 // are not modeled.
 #define TPCC_ACCESS_ALL 			false 
 #define WH_UPDATE					true
-#define NUM_WH 						1
+#define NUM_WH 						100
 //
 enum TPCCTxnType {TPCC_ALL, 
 				TPCC_PAYMENT, 
@@ -189,6 +199,8 @@ extern TestCases					g_test_case;
 // INDEX_STRUCT
 #define IDX_HASH 					1
 #define IDX_BTREE					2
+#define IDX_SKIPLIST				3
+#define IDX_SKIPLIST_FS				4
 // WORKLOAD
 #define YCSB						1
 #define TPCC						2

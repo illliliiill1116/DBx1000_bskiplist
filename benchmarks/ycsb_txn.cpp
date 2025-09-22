@@ -8,6 +8,7 @@
 #include "row.h"
 #include "index_hash.h"
 #include "index_btree.h"
+#include "index_skiplist.h"
 #include "catalog.h"
 #include "manager.h"
 #include "row_lock.h"
@@ -37,7 +38,7 @@ RC ycsb_txn_man::run_txn(base_query * query) {
 			if (iteration == 0) {
 				m_item = index_read(_wl->the_index, req->key, part_id);
 			} 
-#if INDEX_STRUCT == IDX_BTREE
+#if INDEX_STRUCT == IDX_BTREE || INDEX_STRUCT == IDX_SKIPLIST
 			else {
 				_wl->the_index->index_next(get_thd_id(), m_item);
 				if (m_item == NULL)
@@ -47,7 +48,7 @@ RC ycsb_txn_man::run_txn(base_query * query) {
 			row_t * row = ((row_t *)m_item->location);
 			row_t * row_local; 
 			access_t type = req->rtype;
-			
+			 
 			row_local = get_row(row, type);
 			if (row_local == NULL) {
 				rc = Abort;

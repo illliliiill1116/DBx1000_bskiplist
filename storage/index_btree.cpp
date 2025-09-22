@@ -108,7 +108,7 @@ RC index_btree::index_read(idx_key_t key, itemid_t *& item,
 	return rc;
 }
 
-RC index_btree::index_insert(idx_key_t key, itemid_t * item, int part_id) {
+RC index_btree::index_insert(idx_key_t key, itemid_t * item, int part_id, uint64_t thd_id) {
 	glob_param params;
 	if (WORKLOAD == TPCC) assert(part_id != -1);
 	assert(part_id != -1);

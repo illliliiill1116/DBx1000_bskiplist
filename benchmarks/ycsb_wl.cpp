@@ -8,6 +8,7 @@
 #include "row.h"
 #include "index_hash.h"
 #include "index_btree.h"
+#include "index_skiplist.h"
 #include "catalog.h"
 #include "manager.h"
 #include "row_lock.h"
@@ -42,7 +43,7 @@ ycsb_wl::key_to_part(uint64_t key) {
 	return key / rows_per_part;
 }
 
-RC ycsb_wl::init_table() {
+RC ycsb_wl::init_table(uint64_t thd_id) {
 	RC rc;
     uint64_t total_row = 0;
     while (true) {
@@ -73,7 +74,7 @@ RC ycsb_wl::init_table() {
             m_item->location = new_row;
             m_item->valid = true;
             uint64_t idx_key = primary_key;
-            rc = the_index->index_insert(idx_key, m_item, part_id);
+            rc = the_index->index_insert(idx_key, m_item, part_id, thd_id);
             assert(rc == RCOK);
             total_row ++;
         }
@@ -142,7 +143,7 @@ void * ycsb_wl::init_table_slice() {
 		m_item->valid = true;
 		uint64_t idx_key = primary_key;
 		
-		rc = the_index->index_insert(idx_key, m_item, part_id);
+		rc = the_index->index_insert(idx_key, m_item, part_id, tid);
 		assert(rc == RCOK);
 	}
 	return NULL;

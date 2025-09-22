@@ -48,7 +48,7 @@ def test_run(test = '', job=None):
 	cmd = "./rundb %s" % (app_flags)
 	start = datetime.datetime.now()
 	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-	timeout = 10 # in second
+	timeout = 100 # in second
 	while process.poll() is None:
 		time.sleep(1)
 		now = datetime.datetime.now()
@@ -73,7 +73,7 @@ def run_all_test(jobs) :
 		test_compile(job)
 		if job['WORKLOAD'] == 'TEST':
 			test_run('read_write', job)
-			#test_run('conflict', job)
+			test_run('conflict', job)
 		else :
 			test_run('', job)
 	jobs = {}

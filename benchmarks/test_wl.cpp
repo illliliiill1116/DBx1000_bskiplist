@@ -4,6 +4,7 @@
 #include "mem_alloc.h"
 #include "index_hash.h"
 #include "index_btree.h"
+#include "index_skiplist.h"
 #include "thread.h"
 
 RC TestWorkload::init() {
@@ -23,7 +24,7 @@ RC TestWorkload::init_schema(const char * schema_file) {
 	return RCOK;
 }
 
-RC TestWorkload::init_table() {
+RC TestWorkload::init_table(uint64_t thd_id) {
 	RC rc = RCOK;
 	for (int rid = 0; rid < 10; rid ++) {
 		row_t * new_row = NULL;
@@ -42,7 +43,7 @@ RC TestWorkload::init_table() {
 		m_item->location = new_row;
 		m_item->valid = true;
 		uint64_t idx_key = primary_key;
-        rc = the_index->index_insert(idx_key, m_item, 0);
+        rc = the_index->index_insert(idx_key, m_item, 0, thd_id);
         assert(rc == RCOK);
     }
 	return rc;

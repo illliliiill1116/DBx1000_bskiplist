@@ -39,6 +39,7 @@ class Query_queue;
 class Plock;
 class OptCC;
 class VLLMan;
+class itemid_t;
 
 typedef uint32_t UInt32;
 typedef int32_t SInt32;
@@ -147,8 +148,11 @@ enum TsType {R_REQ, W_REQ, P_REQ, XP_REQ};
 // index structure for specific purposes. (e.g. non-primary key access should use hash)
 #if (INDEX_STRUCT == IDX_BTREE)
 #define INDEX		index_btree
-#else  // IDX_HASH
+#elif  (INDEX_STRUCT == IDX_HASH) // IDX_HASH
 #define INDEX		IndexHash
+#else	// IDX_SKIPLIST
+#include "index_skiplist.h"
+#define INDEX		IndexSkiplist
 #endif
 
 /************************************************/

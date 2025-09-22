@@ -6,6 +6,7 @@
 #include "table.h"
 #include "index_hash.h"
 #include "index_btree.h"
+#include "index_skiplist.h"
 #include "tpcc_helper.h"
 #include "row.h"
 #include "query.h"
@@ -50,7 +51,7 @@ RC tpcc_wl::init_schema(const char * schema_file) {
 	return RCOK;
 }
 
-RC tpcc_wl::init_table() {
+RC tpcc_wl::init_table(uint64_t thd_id) {
 	num_wh = g_num_wh;
 
 /******** fill in data ************/
@@ -85,7 +86,7 @@ RC tpcc_wl::get_txn_man(txn_man *& txn_manager, thread_t * h_thd) {
 }
 
 // TODO ITEM table is assumed to be in partition 0
-void tpcc_wl::init_tab_item() {
+void tpcc_wl::init_tab_item(uint64_t thd_id) {
 	for (UInt32 i = 1; i <= g_max_items; i++) {
 		row_t * row;
 		uint64_t row_id;
@@ -104,11 +105,11 @@ void tpcc_wl::init_tab_item() {
 			strcpy(data, "original");		
 		row->set_value(I_DATA, data);
 		
-		index_insert(i_item, i, row, 0);
+		index_insert(i_item, i, row, 0, thd_id);
 	}
 }
 
-void tpcc_wl::init_tab_wh(uint32_t wid) {
+void tpcc_wl::init_tab_wh(uint32_t wid, uint64_t thd_id) {
 	assert(wid >= 1 && wid <= g_num_wh);
 	row_t * row;
 	uint64_t row_id;
@@ -137,11 +138,11 @@ void tpcc_wl::init_tab_wh(uint32_t wid) {
 	row->set_value(W_TAX, tax);
 	row->set_value(W_YTD, w_ytd);
 	
-	index_insert(i_warehouse, wid, row, wh_to_part(wid));
+	index_insert(i_warehouse, wid, row, wh_to_part(wid), thd_id);
 	return;
 }
 
-void tpcc_wl::init_tab_dist(uint64_t wid) {
+void tpcc_wl::init_tab_dist(uint64_t wid, uint64_t thd_id) {
 	for (uint64_t did = 1; did <= DIST_PER_WARE; did++) {
 		row_t * row;
 		uint64_t row_id;
@@ -172,11 +173,11 @@ void tpcc_wl::init_tab_dist(uint64_t wid) {
 		row->set_value(D_YTD, w_ytd);
 		row->set_value(D_NEXT_O_ID, 3001);
 		
-		index_insert(i_district, distKey(did, wid), row, wh_to_part(wid));
+		index_insert(i_district, distKey(did, wid), row, wh_to_part(wid), thd_id);
 	}
 }
 
-void tpcc_wl::init_tab_stock(uint64_t wid) {
+void tpcc_wl::init_tab_stock(uint64_t wid, uint64_t thd_id) {
 	
 	for (UInt32 sid = 1; sid <= g_max_items; sid++) {
 		row_t * row;
@@ -212,11 +213,11 @@ void tpcc_wl::init_tab_stock(uint64_t wid) {
 		}
 		row->set_value(S_DATA, s_data);
 #endif
-		index_insert(i_stock, stockKey(sid, wid), row, wh_to_part(wid));
+		index_insert(i_stock, stockKey(sid, wid), row, wh_to_part(wid), thd_id);
 	}
 }
 
-void tpcc_wl::init_tab_cust(uint64_t did, uint64_t wid) {
+void tpcc_wl::init_tab_cust(uint64_t did, uint64_t wid, uint64_t thd_id) {
 	assert(g_cust_per_dist >= 1000);
 	for (UInt32 cid = 1; cid <= g_cust_per_dist; cid++) {
 		row_t * row;
@@ -275,9 +276,9 @@ void tpcc_wl::init_tab_cust(uint64_t did, uint64_t wid) {
 		row->set_value(C_PAYMENT_CNT, 1);
 		uint64_t key;
 		key = custNPKey(c_last, did, wid);
-		index_insert(i_customer_last, key, row, wh_to_part(wid));
+		index_insert(i_customer_last, key, row, wh_to_part(wid), thd_id);
 		key = custKey(cid, did, wid);
-		index_insert(i_customer_id, key, row, wh_to_part(wid));
+		index_insert(i_customer_id, key, row, wh_to_part(wid), thd_id);
 	}
 }
 
@@ -394,12 +395,12 @@ void * tpcc_wl::threadInitWarehouse(void * This) {
 	srand48_r(wid, tpcc_buffer[tid]);
 	
 	if (tid == 0)
-		wl->init_tab_item();
-	wl->init_tab_wh( wid );
-	wl->init_tab_dist( wid );
-	wl->init_tab_stock( wid );
+		wl->init_tab_item(tid);
+	wl->init_tab_wh( wid, tid );
+	wl->init_tab_dist( wid, tid );
+	wl->init_tab_stock( wid, tid );
 	for (uint64_t did = 1; did <= DIST_PER_WARE; did++) {
-		wl->init_tab_cust(did, wid);
+		wl->init_tab_cust(did, wid, tid);
 		wl->init_tab_order(did, wid);
 		for (uint64_t cid = 1; cid <= g_cust_per_dist; cid++) 
 			wl->init_tab_hist(cid, did, wid);

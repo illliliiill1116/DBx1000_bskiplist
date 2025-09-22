@@ -42,7 +42,7 @@ public:
 					table_t * table, 
 					uint64_t bucket_cnt);
 	bool 		index_exist(idx_key_t key); // check if the key exist.
-	RC 			index_insert(idx_key_t key, itemid_t * item, int part_id=-1);
+	RC 			index_insert(idx_key_t key, itemid_t * item, int part_id=-1, uint64_t thd_id=0);
 	// the following call returns a single item
 	RC	 		index_read(idx_key_t key, itemid_t * &item, int part_id=-1);	
 	RC	 		index_read(idx_key_t key, itemid_t * &item,

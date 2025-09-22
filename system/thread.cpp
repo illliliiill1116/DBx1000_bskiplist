@@ -13,6 +13,8 @@
 #include "mem_alloc.h"
 #include "test.h"
 
+myrand threadRNGs[PREFETCH_SIZE_WORDS * MAX_PARALLELISM];
+
 void thread_t::init(uint64_t thd_id, workload * workload) {
 	_thd_id = thd_id;
 	_wl = workload;
@@ -44,7 +46,7 @@ RC thread_t::run() {
 
 	set_affinity(get_thd_id());
 
-	myrand rdm;
+	myrand& rdm = threadRNGs[PREFETCH_SIZE_WORDS * _thd_id];
 	rdm.init(get_thd_id());
 	RC rc = RCOK;
 	txn_man * m_txn;

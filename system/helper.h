@@ -205,6 +205,7 @@ class myrand {
 public:
 	void init(uint64_t seed);
 	uint64_t next();
+	uint64_t next_unlimited();
 private:
 	uint64_t seed;
 };

@@ -11,7 +11,7 @@ class tpcc_query;
 class tpcc_wl : public workload {
 public:
 	RC init();
-	RC init_table();
+	RC init_table(uint64_t thd_id = 0);
 	RC init_schema(const char * schema_file);
 	RC get_txn_man(txn_man *& txn_manager, thread_t * h_thd);
 	table_t * 		t_warehouse;
@@ -38,11 +38,11 @@ public:
 	uint32_t next_tid;
 private:
 	uint64_t num_wh;
-	void init_tab_item();
-	void init_tab_wh(uint32_t wid);
-	void init_tab_dist(uint64_t w_id);
-	void init_tab_stock(uint64_t w_id);
-	void init_tab_cust(uint64_t d_id, uint64_t w_id);
+	void init_tab_item(uint64_t thd_id);
+	void init_tab_wh(uint32_t wid, uint64_t thd_id);
+	void init_tab_dist(uint64_t w_id, uint64_t thd_id);
+	void init_tab_stock(uint64_t w_id, uint64_t thd_id);
+	void init_tab_cust(uint64_t d_id, uint64_t w_id, uint64_t thd_id);
 	void init_tab_hist(uint64_t c_id, uint64_t d_id, uint64_t w_id);
 	void init_tab_order(uint64_t d_id, uint64_t w_id);
 	

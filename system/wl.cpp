@@ -5,6 +5,7 @@
 #include "table.h"
 #include "index_hash.h"
 #include "index_btree.h"
+#include "index_skiplist.h"
 #include "catalog.h"
 #include "mem_alloc.h"
 
@@ -104,13 +105,13 @@ RC workload::init_schema(string schema_file) {
 
 
 
-void workload::index_insert(string index_name, uint64_t key, row_t * row) {
+void workload::index_insert(string index_name, uint64_t key, row_t * row, uint64_t thd_id) {
 	assert(false);
 	INDEX * index = (INDEX *) indexes[index_name];
-	index_insert(index, key, row);
+	index_insert(index, key, row, -1, thd_id);
 }
 
-void workload::index_insert(INDEX * index, uint64_t key, row_t * row, int64_t part_id) {
+void workload::index_insert(INDEX * index, uint64_t key, row_t * row, int64_t part_id, uint64_t thd_id) {
 	uint64_t pid = part_id;
 	if (part_id == -1)
 		pid = get_part_id(row);
@@ -121,7 +122,7 @@ void workload::index_insert(INDEX * index, uint64_t key, row_t * row, int64_t pa
 	m_item->location = row;
 	m_item->valid = true;
 
-    assert( index->index_insert(key, m_item, pid) == RCOK );
+    assert( index->index_insert(key, m_item, pid, thd_id) == RCOK );
 }
 
 

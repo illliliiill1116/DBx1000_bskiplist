@@ -38,7 +38,7 @@ IndexHash::release_latch(BucketHeader * bucket) {
 }
 
 	
-RC IndexHash::index_insert(idx_key_t key, itemid_t * item, int part_id) {
+RC IndexHash::index_insert(idx_key_t key, itemid_t * item, int part_id, uint64_t thd_id) {
 	RC rc = RCOK;
 	uint64_t bkt_idx = hash(key);
 	assert(bkt_idx < _bucket_cnt_per_part);

@@ -11,7 +11,7 @@ class ycsb_query;
 class ycsb_wl : public workload {
 public :
 	RC init();
-	RC init_table();
+	RC init_table(uint64_t thd_id = 0);
 	RC init_schema(string schema_file);
 	RC get_txn_man(txn_man *& txn_manager, thread_t * h_thd);
 	int key_to_part(uint64_t key);
