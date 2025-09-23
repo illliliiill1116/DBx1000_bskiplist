@@ -65,7 +65,7 @@
 #define CENTRAL_INDEX				false
 #define CENTRAL_MANAGER 			false
 // #define INDEX_STRUCT				IDX_HASH
-#define INDEX_STRUCT				IDX_SKIPLIST
+#define INDEX_STRUCT				IDX_SKIPLISTxFSxSIMD
 #define BTREE_ORDER 				16
 
 // [DL_DETECT] 
@@ -142,7 +142,7 @@
 // are not modeled.
 #define TPCC_ACCESS_ALL 			false 
 #define WH_UPDATE					true
-#define NUM_WH 						100
+#define NUM_WH 						1
 //
 enum TPCCTxnType {TPCC_ALL, 
 				TPCC_PAYMENT, 
