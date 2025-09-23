@@ -8,10 +8,10 @@
 typedef struct SkiplistForesightNode slf_node_t;
 typedef slf_node_t * volatile sh_fnode_pt;
 
-typedef struct next_foresight_st {
+typedef struct  __attribute__((aligned(16))) next_foresight_st {
     sh_fnode_pt next_ptr;
     volatile idx_key_t next_key;
-} next_foresight_t __attribute__((aligned(16))); // must be aligned to support wide CAS
+} next_foresight_t; // must be aligned to support wide CAS
 
 // each node contains items sharing the same key
 struct SkiplistForesightNode {
