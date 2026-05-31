@@ -14,6 +14,7 @@ def replace(filename, pattern, replacement):
 jobs = {}
 dbms_cfg = ["config-std.h", "config.h"]
 algs = ['DL_DETECT', 'NO_WAIT', 'HEKATON', 'SILO', 'TICTOC']
+# algs = ['NO_WAIT']
 def insert_job(alg, workload):
 	jobs[alg + '_' + workload] = {
 		"WORKLOAD"			: workload,
@@ -48,7 +49,7 @@ def test_run(test = '', job=None):
 	cmd = "./rundb %s" % (app_flags)
 	start = datetime.datetime.now()
 	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-	timeout = 100 # in second
+	timeout = 10000 # in second
 	while process.poll() is None:
 		time.sleep(1)
 		now = datetime.datetime.now()
