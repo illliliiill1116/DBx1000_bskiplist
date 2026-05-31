@@ -154,6 +154,7 @@ retry:
 
     if (new_node == nullptr) {
     new_node = allocate_node(sl_randomLevel(thd_id), key, part_id); // TODO: pass thd_id on insert
+    item->next = nullptr;
     new_node->items = item;
     level = new_node->toplevel;
     }
@@ -228,7 +229,7 @@ RC IndexSkiplistForesight::index_next(uint64_t thd_id, itemid_t * &item, bool sa
         if (last_node) {
             auto next_node = last_node->next[0].next_ptr;
             cur_node_per_thd[thd_id*PREFETCH_SIZE_WORDS] = next_node;
-            next_item = next_node->items;
+            if (next_node) next_item = next_node->items;
         }
     }
     cur_item_per_thd[thd_id*PREFETCH_SIZE_WORDS] = next_item;
