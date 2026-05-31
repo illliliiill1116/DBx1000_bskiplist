@@ -12,7 +12,7 @@ for exe in run_*; do
     [ -x "$exe" ] || continue
 
     workload="${exe#run_}"        # strip "run_" prefix
-    outfile="../out/${workload}.txt"
+    outfile="./out/${workload}.txt"
 
     # Clear the output file if it exists
     > "$outfile"
@@ -25,4 +25,3 @@ for exe in run_*; do
     done
 done
 
-  echo "Finished running macrobenchmark" | mail -s "Skiplist Experiment Update" tomer.cory@campus.technion.ac.il
