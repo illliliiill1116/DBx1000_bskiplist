@@ -1,3 +1,32 @@
+This clone of DBx1000 contains the artifacts for the macrobenchmarks used in the paper: _Foresight: Cache-Friendly Skiplists for In-Memory Indexes_. For the artifacts of the microbenchmarks, which include additional skiplist implementations, see: <https://github.com/tomercory/synchrobench_foresight>
+
+Foresight is a locality-enhancing optimization for skiplist-based in-memory indexes. It augments skiplist nodes with foreseen keys to reduce pointer-chasing and cache misses, and it is accompanied by two integration techniques for concurrent skiplists (a portable Optimistic Validation method and a SIMD-based method), to preserve correctness without weakening the progress guarantees of the underlying designs.
+
+Besides fixing a few compilation errors and bugs, and adding convenient scripts for experiment running and table generation, the main addition in this clone is the incorporation of a variant of Fraser's concurrent skiplist [1], adapted to DBx1000. Three version are included: 
+
+1. IDX_SKIPLIST – baseline Fraser skiplist (no Foresight)
+
+2. IDX_SKIPLISTxFS – Foresight-augmented skiplist using Optimistic Validation (portable)
+
+3. IDX_SKIPLISTxFSxSIMD – Foresight-augmented skiplist using SIMD-based synchronization (non-portable; requires atomic 16-byte SIMD loads/stores)
+
+To reproduce the paper’s macrobenchmark results:
+
+1. Build and run the benchmarks:
+```bash
+./macrobenchmark_run.sh
+```
+2. Generate the result tables:
+```bash
+python3 gen_tables.py
+```
+
+On a modern multi-core Intel machine, the results should qualitatively match those reported in the paper. Before running, set the `threads` variable in `compile_macrobenchmarks.py` to the number of logical hardware threads on the target machine. For best reproducibility, the benchmarks should be the only substantial application running in user space during the experiments.
+
+[1] Keir Fraser, [Practical lock-freedom](https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-579.pdf), Technical Report, University of Cambridge, Computer Laboratory, 2004
+
+**Below are the original README contents for DBx1000**
+
 <img src="logo/dbx1000.svg" alt="DBx1000 Logo" width="60%">
 
 -----------------
@@ -6,7 +35,7 @@ DBx1000 is a single node OLTP database management system (DBMS). The goal of DBx
 
 The concurrency control scalability study is described in the following paper. 
 
-[1] Xiangyao Yu, George Bezerra, Andrew Pavlo, Srinivas Devadas, Michael Stonebraker, [Staring into the Abyss: An Evaluation of Concurrency Control with One Thousand Cores](http://www.vldb.org/pvldb/vol8/p209-yu.pdf), VLDB 2014
+[2] Xiangyao Yu, George Bezerra, Andrew Pavlo, Srinivas Devadas, Michael Stonebraker, [Staring into the Abyss: An Evaluation of Concurrency Control with One Thousand Cores](http://www.vldb.org/pvldb/vol8/p209-yu.pdf), VLDB 2014
     
     
     
@@ -64,14 +93,14 @@ Branches and Other Related Systems
 
 DBx1000 currently contains two branches: 
 
-1. The master branch focuses on implementations of different concurrency control protocols described [1]. The master branch also contains the implementation of TicToc [2]
+1. The master branch focuses on implementations of different concurrency control protocols described [2]. The master branch also contains the implementation of TicToc [3]
 
-[2] Xiangyao Yu, Andrew Pavlo, Daniel Sanchez, Srinivas Devadas, [TicToc: Time Traveling Optimistic Concurrency Control](https://dl.acm.org/doi/abs/10.1145/2882903.2882935), SIGMOD 2016
+[3] Xiangyao Yu, Andrew Pavlo, Daniel Sanchez, Srinivas Devadas, [TicToc: Time Traveling Optimistic Concurrency Control](https://dl.acm.org/doi/abs/10.1145/2882903.2882935), SIGMOD 2016
 
 
-2. The logging branch implements the Taurus logging protocol as described the [3]. The logging branch is a mirror of https://github.com/yuxiamit/DBx1000_logging.
+2. The logging branch implements the Taurus logging protocol as described the [4]. The logging branch is a mirror of https://github.com/yuxiamit/DBx1000_logging.
     
-[3] Yu Xia, Xiangyao Yu, Andrew Pavlo, Srinivas Devadas, [Taurus: Lightweight Parallel Logging for In-Memory Database Management Systems](http://vldb.org/pvldb/vol14/p189-xia.pdf), VLDB 2020
+[4] Yu Xia, Xiangyao Yu, Andrew Pavlo, Srinivas Devadas, [Taurus: Lightweight Parallel Logging for In-Memory Database Management Systems](http://vldb.org/pvldb/vol14/p189-xia.pdf), VLDB 2020
 
 The following two distributed DBMS testbeds have been developed based on DBx1000
 
