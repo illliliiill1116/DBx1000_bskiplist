@@ -20,7 +20,7 @@ for exe in run_*; do
     for i in {1..5}; do
         echo "=== Running $exe (workload=$workload), iteration $i ==="
         echo "=== Iteration $i ===" >> "$outfile"
-        "./$exe" >> "$outfile" 2>&1
+        numactl --interleave=all "./$exe" >> "$outfile" 2>&1
         echo "" >> "$outfile"
     done
 done
