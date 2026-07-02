@@ -30,8 +30,8 @@ RC tpcc_wl::init() {
 	return RCOK;
 }
 
-RC tpcc_wl::init_schema(const char * schema_file) {
-	workload::init_schema(schema_file);
+RC tpcc_wl::init_schema(std::string schema_file) {
+	workload::init_schema(schema_file.c_str());
 	t_warehouse = tables["WAREHOUSE"];
 	t_district = tables["DISTRICT"];
 	t_customer = tables["CUSTOMER"];

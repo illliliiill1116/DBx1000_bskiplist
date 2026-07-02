@@ -17,8 +17,8 @@ RC TestWorkload::init() {
 	return RCOK;
 }
 
-RC TestWorkload::init_schema(const char * schema_file) {
-	workload::init_schema(schema_file);
+RC TestWorkload::init_schema(std::string schema_file) {
+	workload::init_schema(schema_file.c_str());
 	the_table = tables["MAIN_TABLE"]; 	
 	the_index = indexes["MAIN_INDEX"];
 	return RCOK;

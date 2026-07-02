@@ -40,6 +40,8 @@ class Plock;
 class OptCC;
 class VLLMan;
 class itemid_t;
+class IndexBskiplist;
+
 
 typedef uint32_t UInt32;
 typedef int32_t SInt32;
@@ -153,6 +155,9 @@ enum TsType {R_REQ, W_REQ, P_REQ, XP_REQ};
 #elif	(INDEX_STRUCT == IDX_SKIPLIST)
 #include "index_skiplist.h"
 #define INDEX		IndexSkiplist
+#elif	(INDEX_STRUCT == IDX_BSKIPLIST)
+#include "index_bskiplist.h"
+#define INDEX		IndexBskiplist
 #else // IDX_SKIPLISTxFS or IDX_SKIPLISTxFSxSIMD
 #include "index_skiplist_foresight.h"
 #define INDEX		IndexSkiplistForesight
