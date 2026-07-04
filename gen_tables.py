@@ -10,7 +10,7 @@ PER_THREAD_FILE = "per_thread_throughput.csv"
 IDX_TIME_FILE = "idx_time_per_100K_txns.csv"
 
 # Regex to parse filenames: IDX_<option>_<workload>.txt
-fname_re = re.compile(r"^IDX_([^_]+)_(.+)\.txt$")
+fname_re = re.compile(r"^IDX_(.+)_(.+_\d+t)\.txt$")
 
 # Data structure: results[option][workload] = {"throughput": [...], "idx_time": [...]}
 results = {}
