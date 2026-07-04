@@ -163,7 +163,7 @@ public:
 
 private:
   std::atomic_flag writer{false};
-  partitioned_counter<48> readers{};
+  partitioned_counter<128> readers{};
 };
 
 class ReaderWriterLock2 {

@@ -54,7 +54,7 @@ public:
   void unlock() { flag = false; }
 };
 
-template <int num_counters = 8> class partitioned_counter {
+template <int num_counters = 128> class partitioned_counter {
 
 #ifdef __cpp_lib_hardware_interference_size
   static constexpr std::size_t hardware_constructive_interference_size =
@@ -112,9 +112,9 @@ public:
 
     readers.add(1, cpuid);
 
-    while (writer.test(std::memory_order_acquire)) {
+    while (writer.test(std::memory_order_relaxed)) {
       readers.add(-1, cpuid);
-      writer.wait(true, std::memory_order_acquire);
+      writer.wait(true, std::memory_order_relaxed);
       readers.add(1, cpuid);
     }
   }
@@ -163,7 +163,7 @@ public:
 
 private:
   std::atomic_flag writer{false};
-  partitioned_counter<48> readers{};
+  partitioned_counter<128> readers{};
 };
 
 class ReaderWriterLock2 {
@@ -177,9 +177,9 @@ public:
 
     readers++;
 
-    while (writer.test(std::memory_order_acquire)) {
+    while (writer.test(std::memory_order_relaxed)) {
       readers--;
-      writer.wait(true, std::memory_order_acquire);
+      writer.wait(true, std::memory_order_relaxed);
       readers++;
     }
   }
