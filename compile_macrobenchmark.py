@@ -13,9 +13,10 @@ def replace(filename, pattern, replacement):
 
 jobs = {}
 dbms_cfg = ["config-std.h", "config.h"]
-#algs = ['IDX_BSKIPLIST']
-algs = ['IDX_BSKIPLIST', 'IDX_SKIPLIST', 'IDX_SKIPLISTxFS', 'IDX_SKIPLISTxFSxSIMD']
-workloads = ['YCSB', 'TPCC']
+#algs = ['IDX_BTREEOLC']
+algs = ['IDX_BTREEOLC', 'IDX_BPTREE', 'IDX_OLC_BSKIPLIST', 'IDX_BSKIPLIST', 'IDX_SKIPLIST', 'IDX_SKIPLISTxFS', 'IDX_SKIPLISTxFSxSIMD']
+workloads = ['TPCC']
+#workloads = ['YCSB', 'TPCC']
 threads = ['128']
 YCSB_workloads = ['A', 'B', 'C']
 YCSB_sizes = ['10485760', '33554432']

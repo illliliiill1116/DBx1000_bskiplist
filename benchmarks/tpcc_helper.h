@@ -18,6 +18,7 @@ uint64_t RAND(uint64_t max, uint64_t thd_id);
 // random number from [x, y]
 uint64_t URand(uint64_t x, uint64_t y, uint64_t thd_id);
 // non-uniform random number
+void init_NURand_constants();
 uint64_t NURand(uint64_t A, uint64_t x, uint64_t y, uint64_t thd_id);
 // random string with random length beteen min and max.
 uint64_t MakeAlphaString(int min, int max, char * str, uint64_t thd_id);

@@ -128,6 +128,7 @@ RC tpcc_txn_man::run_payment(tpcc_query * query) {
 		// The performance won't be much different.
 		INDEX * index = _wl->i_customer_last;
 		item = index_read(index, key, wh_to_part(c_w_id));
+	
 		assert(item != NULL);
 		
 		int cnt = 0;

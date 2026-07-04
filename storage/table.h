@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "global.h"
-
+#include <atomic>
 // TODO sequential scan is not supported yet.
 // only index access is supported for table. 
 class Catalog;
@@ -19,13 +19,13 @@ public:
 
 	void delete_row(); // TODO delete_row is not supportet yet
 
-	uint64_t get_table_size() { return cur_tab_size; };
+	uint64_t get_table_size() { return cur_tab_size.load(std::memory_order_relaxed); };
 	Catalog * get_schema() { return schema; };
 	const char * get_table_name() { return table_name; };
 
 	Catalog * 		schema;
 private:
 	const char * 	table_name;
-	uint64_t  		cur_tab_size;
+	std::atomic<uint64_t> cur_tab_size{0};
 	char 			pad[CL_SIZE - sizeof(void *)*3];
 };

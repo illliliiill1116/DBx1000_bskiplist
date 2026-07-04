@@ -40,7 +40,10 @@ class Plock;
 class OptCC;
 class VLLMan;
 class itemid_t;
-class IndexBskiplist;
+class IndexOLCBskiplist;
+class IndexRWBskiplist;
+class IndexBPtree;
+class IndexBTreeOLC;
 
 
 typedef uint32_t UInt32;
@@ -155,9 +158,18 @@ enum TsType {R_REQ, W_REQ, P_REQ, XP_REQ};
 #elif	(INDEX_STRUCT == IDX_SKIPLIST)
 #include "index_skiplist.h"
 #define INDEX		IndexSkiplist
-#elif	(INDEX_STRUCT == IDX_BSKIPLIST)
-#include "index_bskiplist.h"
-#define INDEX		IndexBskiplist
+#elif	(INDEX_STRUCT == IDX_OLC_BSKIPLIST)
+#include "index_olc_bskiplist.h"
+#define INDEX		IndexOLCBskiplist
+#elif	(INDEX_STRUCT == IDX_RW_BSKIPLIST)
+#include "index_rw_bskiplist.h"
+#define INDEX		IndexRWBskiplist
+#elif	(INDEX_STRUCT == IDX_BPTREE)
+#include "index_BPtree.h"
+#define INDEX		IndexBPtree
+#elif	(INDEX_STRUCT == IDX_BTREEOLC)
+#include "index_BTreeOLC.h"
+#define INDEX		IndexBTreeOLC
 #else // IDX_SKIPLISTxFS or IDX_SKIPLISTxFSxSIMD
 #include "index_skiplist_foresight.h"
 #define INDEX		IndexSkiplistForesight

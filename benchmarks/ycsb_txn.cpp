@@ -38,7 +38,15 @@ RC ycsb_txn_man::run_txn(base_query * query) {
 			if (iteration == 0) {
 				m_item = index_read(_wl->the_index, req->key, part_id);
 			} 
-#if INDEX_STRUCT == IDX_BTREE || INDEX_STRUCT == IDX_SKIPLIST || INDEX_STRUCT == IDX_SKIPLISTxFS || INDEX_STRUCT == IDX_SKIPLISTxFSxSIMD || INDEX_STRUCT == IDX_BSKIPLIST
+#if \
+	INDEX_STRUCT == IDX_BTREE 				|| \
+	INDEX_STRUCT == IDX_SKIPLIST 			|| \
+	INDEX_STRUCT == IDX_SKIPLISTxFS 		|| \
+	INDEX_STRUCT == IDX_SKIPLISTxFSxSIMD 	|| \
+	INDEX_STRUCT == IDX_OLC_BSKIPLIST 		|| \
+	INDEX_STRUCT == IDX_RW_BSKIPLIST 		|| \
+	INDEX_STRUCT == IDX_BPTREE 			|| \
+	INDEX_STRUCT == IDX_BTREEOLC
 			else {
 				_wl->the_index->index_next(get_thd_id(), m_item);
 				if (m_item == NULL)

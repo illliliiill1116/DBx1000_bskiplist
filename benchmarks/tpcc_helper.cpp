@@ -52,39 +52,37 @@ uint64_t URand(uint64_t x, uint64_t y, uint64_t thd_id) {
     return x + RAND(y - x + 1, thd_id);
 }
 
+
+static uint64_t g_C_255 = 0;
+static uint64_t g_C_1023 = 0;
+static uint64_t g_C_8191 = 0;
+
+void init_NURand_constants() {
+    drand48_data local_buf;
+    srand48_r(12345, &local_buf);
+
+    int64_t r;
+    lrand48_r(&local_buf, &r);
+    g_C_255 = (uint64_t)(r % 256);
+
+    lrand48_r(&local_buf, &r);
+    g_C_1023 = (uint64_t)(r % 1024);
+
+    lrand48_r(&local_buf, &r);
+    g_C_8191 = (uint64_t)(r % 8192);
+}
+
 uint64_t NURand(uint64_t A, uint64_t x, uint64_t y, uint64_t thd_id) {
-  static bool C_255_init = false;
-  static bool C_1023_init = false;
-  static bool C_8191_init = false;
-  static uint64_t C_255, C_1023, C_8191;
-  int C = 0;
-  switch(A) {
-    case 255:
-      if(!C_255_init) {
-        C_255 = (uint64_t) URand(0,255, thd_id);
-        C_255_init = true;
-      }
-      C = C_255;
-      break;
-    case 1023:
-      if(!C_1023_init) {
-        C_1023 = (uint64_t) URand(0,1023, thd_id);
-        C_1023_init = true;
-      }
-      C = C_1023;
-      break;
-    case 8191:
-      if(!C_8191_init) {
-        C_8191 = (uint64_t) URand(0,8191, thd_id);
-        C_8191_init = true;
-      }
-      C = C_8191;
-      break;
-    default:
-      M_ASSERT(false, "Error! NURand\n");
-      exit(-1);
-  }
-  return(((URand(0,A, thd_id) | URand(x,y, thd_id))+C)%(y-x+1))+x;
+    uint64_t C = 0;
+    switch (A) {
+        case 255:  C = g_C_255;  break;
+        case 1023: C = g_C_1023; break;
+        case 8191: C = g_C_8191; break;
+        default:
+            M_ASSERT(false, "Error! NURand\n");
+            exit(-1);
+    }
+    return (((URand(0, A, thd_id) | URand(x, y, thd_id)) + C) % (y - x + 1)) + x;
 }
 
 uint64_t MakeAlphaString(int min, int max, char* str, uint64_t thd_id) {

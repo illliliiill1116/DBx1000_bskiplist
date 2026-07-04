@@ -15,6 +15,7 @@
 #include "tpcc_const.h"
 
 RC tpcc_wl::init() {
+	init_NURand_constants();
 	workload::init();
 	string path = "./benchmarks/";
 #if TPCC_SMALL
