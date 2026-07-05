@@ -53,8 +53,9 @@ def test_compile(jobname, job):
 		pattern = r"\#define\s*" + re.escape(param) + r'.*'
 		replacement = "#define " + param + ' ' + str(value)
 		replace(dbms_cfg[1], pattern, replacement)
+	with_folly = 1 if job.get("INDEX_STRUCT") == "IDX_FOLLY_SKIPLIST" else 0
 	os.system("make clean > temp.out 2>&1")
-	ret = os.system("make -j > temp.out 2>&1")
+	ret = os.system(f"make -j WITH_FOLLY={with_folly} > temp.out 2>&1")
 	if ret != 0:
 		print("ERROR in compiling job=")
 		print(job)
