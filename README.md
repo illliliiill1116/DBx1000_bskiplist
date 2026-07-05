@@ -1,3 +1,30 @@
+This clone further extends the Foresight artifact (<https://github.com/tomercory/DBx1000_foresight>) below with several additional concurrent index structures, integrated as DBx1000 index backends:
+
+1. IDX_OLC_BSKIPLIST – <https://github.com/illliliiill1116/hocc64-bskiplist>
+
+2. IDX_RW_BSKIPLIST – <https://github.com/Ratbuyer/bskip_artifact>
+
+3. IDX_BPTREE – <https://github.com/wheatman/BP-Tree>
+
+4. IDX_BTREEOLC – <https://github.com/wangziqi2016/index-microbench/blob/master/BTreeOLC/BTreeOLC.h>
+
+5. IDX_FOLLY_SKIPLIST – <https://github.com/facebook/folly>
+
+To build and run the folly baseline:
+```bash
+bash scripts/check_folly_deps.sh 
+bash scripts/setup_folly.sh
+make WITH_FOLLY=1
+```
+
+To reproduce the macrobenchmark results across all integrated indexes:
+```bash
+./macrobenchmark_run.sh
+python3 gen_tables.py
+```
+
+-----------------
+
 This clone of DBx1000 contains the artifacts for the macrobenchmarks used in the paper: _Foresight: Cache-Friendly Skiplists for In-Memory Indexes_. For the artifacts of the microbenchmarks, which include additional skiplist implementations, see: <https://github.com/tomercory/synchrobench_foresight>
 
 Foresight is a locality-enhancing optimization for skiplist-based in-memory indexes. It augments skiplist nodes with foreseen keys to reduce pointer-chasing and cache misses, and it is accompanied by two integration techniques for concurrent skiplists (a portable Optimistic Validation method and a SIMD-based method), to preserve correctness without weakening the progress guarantees of the underlying designs.
