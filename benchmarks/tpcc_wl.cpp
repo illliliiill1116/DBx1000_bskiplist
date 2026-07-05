@@ -26,8 +26,8 @@ RC tpcc_wl::init() {
 	cout << "reading schema file: " << path << endl;
 	init_schema( path.c_str() );
 	cout << "TPCC schema initialized" << endl;
-	init_table();
 	next_tid = 0;
+	init_table();
 	return RCOK;
 }
 
