@@ -44,6 +44,7 @@ class IndexOLCBskiplist;
 class IndexRWBskiplist;
 class IndexBPtree;
 class IndexBTreeOLC;
+class IndexFollySkiplist;
 
 
 typedef uint32_t UInt32;
@@ -170,6 +171,9 @@ enum TsType {R_REQ, W_REQ, P_REQ, XP_REQ};
 #elif	(INDEX_STRUCT == IDX_BTREEOLC)
 #include "index_BTreeOLC.h"
 #define INDEX		IndexBTreeOLC
+#elif	(INDEX_STRUCT == IDX_FOLLY_SKIPLIST)
+#include "index_folly_skiplist.h"
+#define INDEX		IndexFollySkiplist
 #else // IDX_SKIPLISTxFS or IDX_SKIPLISTxFSxSIMD
 #include "index_skiplist_foresight.h"
 #define INDEX		IndexSkiplistForesight

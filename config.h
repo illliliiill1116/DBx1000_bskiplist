@@ -205,6 +205,7 @@ extern TestCases					g_test_case;
 #define IDX_RW_BSKIPLIST			7
 #define IDX_BPTREE					8
 #define IDX_BTREEOLC				9
+#define IDX_FOLLY_SKIPLIST			10
 // WORKLOAD
 #define YCSB						1
 #define TPCC						2

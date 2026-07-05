@@ -2,7 +2,7 @@
 import os
 import re
 import csv
-from statistics import mean
+from statistics import median
 from pathlib import Path
 
 OUTDIR = Path("out")
@@ -28,7 +28,7 @@ for file in OUTDIR.glob("IDX_*.txt"):
             if not line.startswith("[summary]"):
                 continue  # skip non-summary lines
 
-            fields = dict(re.findall(r"(\w+)=(\d+)", line))
+            fields = dict(re.findall(r"(\w+)=([\d.]+)", line))
             txn_cnt = float(fields["txn_cnt"])
             run_time = float(fields["run_time"])
             time_index = float(fields["time_index"])
@@ -53,8 +53,11 @@ def write_csv(filename, metric):
             row = [opt]
             for wl in all_workloads:
                 if wl in results[opt]:
-                    values = results[opt][wl][metric]
-                    row.append(f"{mean(values):.6f}" if values else "")
+                    # drop the first iteration (warm-up run) and take the
+                    # median of the remaining ones -- macrobenchmark_run.sh
+                    # runs each workload 6 times, only the last 5 count.
+                    values = results[opt][wl][metric][1:]
+                    row.append(f"{median(values):.6f}" if values else "")
                 else:
                     row.append("")
             writer.writerow(row)

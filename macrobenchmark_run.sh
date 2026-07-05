@@ -17,7 +17,7 @@ for exe in run_*; do
     # Clear the output file if it exists
     > "$outfile"
 
-    for i in {1..5}; do
+    for i in {1..6}; do
         echo "=== Running $exe (workload=$workload), iteration $i ==="
         echo "=== Iteration $i ===" >> "$outfile"
         numactl --interleave=all "./$exe" >> "$outfile" 2>&1

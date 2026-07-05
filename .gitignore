@@ -1,2 +1,13 @@
 *.o
 *.d
+*.csv
+
+# build output
+/rundb
+/run_*
+/temp.out
+/out/
+
+# folly
+third_party/
+

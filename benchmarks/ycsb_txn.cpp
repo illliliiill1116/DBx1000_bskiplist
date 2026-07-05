@@ -45,8 +45,9 @@ RC ycsb_txn_man::run_txn(base_query * query) {
 	INDEX_STRUCT == IDX_SKIPLISTxFSxSIMD 	|| \
 	INDEX_STRUCT == IDX_OLC_BSKIPLIST 		|| \
 	INDEX_STRUCT == IDX_RW_BSKIPLIST 		|| \
-	INDEX_STRUCT == IDX_BPTREE 			|| \
-	INDEX_STRUCT == IDX_BTREEOLC
+	INDEX_STRUCT == IDX_BPTREE 				|| \
+	INDEX_STRUCT == IDX_BTREEOLC 			|| \
+	INDEX_STRUCT == IDX_FOLLY_SKIPLIST
 			else {
 				_wl->the_index->index_next(get_thd_id(), m_item);
 				if (m_item == NULL)
